@@ -25,18 +25,30 @@ export function fetchProjects() {
 };
 
 export const GET_PROJECT = 'GET_PROJECT';
-export function getProject(project) {
+export function getProject(currentProject) {
     return {
         type: GET_PROJECT,
-        project
+        currentProject
     }
 };
 
 export const CREATE_PROJECT = 'CREATE_PROJECT';
-export function createProject(project) {
+function createProject(project) {
     return {
         type: CREATE_PROJECT,
-        project
+        currentProject: project
     }
+}
+
+export function addProject(project) {
+    return function (dispatch) {
+        dispatch(createProject(project));
+
+        return new Project(project).save()
+            .then(createdProject => {
+                dispatch(getProject(createdProject));
+                dispatch(fetchProjects());
+            });
+    };
 };
 

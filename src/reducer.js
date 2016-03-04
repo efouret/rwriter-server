@@ -66,6 +66,8 @@ function projects(state = List(), action) {
 
 function currentProject(state = Map(), action) {
     switch (action.type) {
+        case CREATE_PROJECT:
+
         default:
             return state;
     }

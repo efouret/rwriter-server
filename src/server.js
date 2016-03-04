@@ -1,4 +1,5 @@
 import Server from 'socket.io';
+import {addProject} from './actions';
 
 export function startServer(store) {
   const io = new Server().attach(8090);
@@ -9,6 +10,15 @@ export function startServer(store) {
 
   io.on('connection', (socket) => {
     socket.emit('state', store.getState().toJS());
-    socket.on('action', store.dispatch.bind(store));
+    socket.on('action', action => {
+        switch (action.type) {
+            case 'ADD_PROJECT':
+                store.dispatch(addProject(action.currentProject));
+                break;
+            default:
+                store.dispatch(action);
+        }
+
+    });
   });
 }
