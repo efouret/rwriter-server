@@ -1,17 +1,25 @@
-import mongoose from 'mongoose';
+const app       = require('koa')();
+const cors      = require('kcors');
+const mongoose  = require('mongoose');
 
-import makeStore from './src/store';
-import {startServer} from './src/server';
-import Project from './src/schemas/Project';
-import {fetchProjects} from './src/actions';
+const projects  = require('./routes/projects');
+const chapters  = require('./routes/chapters');
+const scenes    = require('./routes/scenes');
 
 mongoose.connect('mongodb://localhost/test');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log('Mongoose connected!');
-    const store = makeStore();
-    store.dispatch(fetchProjects());
-    startServer(store);
 });
 
+app
+    .use(cors())
+    .use(projects.routes())
+    .use(chapters.routes())
+    .use(scenes.routes())
+    .use(projects.allowedMethods())
+    .use(chapters.allowedMethods())
+    .use(scenes.allowedMethods());
+
+app.listen(8090);
