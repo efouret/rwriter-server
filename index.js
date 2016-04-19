@@ -4,14 +4,17 @@ const mongoose = require('mongoose');
 
 const projects = require('./routes/projects');
 const characters = require('./routes/characters');
+const locations = require('./routes/locations');
 const chapters = require('./routes/chapters');
 const scenes = require('./routes/scenes');
+
+const port = 8090;
 
 mongoose.connect('mongodb://localhost/test');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
-    console.log('Mongoose connected!');
+    console.log(`Server listening on port ${port}`);
 });
 
 app
@@ -24,11 +27,13 @@ app
     })
     .use(projects.routes())
     .use(characters.routes())
+    .use(locations.routes())
     .use(chapters.routes())
     .use(scenes.routes())
     .use(projects.allowedMethods())
     .use(characters.allowedMethods())
+    .use(locations.allowedMethods())
     .use(chapters.allowedMethods())
     .use(scenes.allowedMethods());
 
-app.listen(8090);
+app.listen(port);
