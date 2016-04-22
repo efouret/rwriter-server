@@ -23,7 +23,7 @@ app
         let start = new Date;
         yield next;
         let ms = new Date - start;
-        console.log('%s %s - %s', this.method, this.url, ms);
+        console.log('%s %s - %s - %s', this.method, this.url, this.status, ms);
     })
     .use(projects.routes())
     .use(characters.routes())
