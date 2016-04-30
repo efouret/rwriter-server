@@ -22,6 +22,13 @@ router
             this.set('Location', `/projects/${project.id}`);
             this.status = 201;
         }
+    )
+    .put('/projects/:id', koaBody,
+        function *(next) {
+            console.log(this.request.body);
+            let project = yield Project.findByIdAndUpdate(this.params.id, this.request.body);
+            this.status = 204;
+        }
     );
 
 module.exports = router;

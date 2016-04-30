@@ -21,15 +21,18 @@ app
     .use(cors())
     .use(function* (next) {
         let start = new Date;
+        let inBody = this.request.body;
         yield next;
         let ms = new Date - start;
-        console.log('%s %s - %s - %s', this.method, this.url, this.status, ms);
+        console.log('%s %s - IN %s - OUT %s - %s - %s', this.method, this.url, inBody, this.body, this.status, ms);
     })
+
     .use(projects.routes())
     .use(characters.routes())
     .use(locations.routes())
     .use(chapters.routes())
     .use(scenes.routes())
+
     .use(projects.allowedMethods())
     .use(characters.allowedMethods())
     .use(locations.allowedMethods())

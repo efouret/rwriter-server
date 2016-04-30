@@ -21,6 +21,7 @@ router
         function *(next) {
             let character = yield new Character(this.request.body).save();
             this.set('Location', `/characters/${character.id}`);
+            this.set('Access-Control-Expose-Headers', 'Location');
             this.status = 201;
         }
     );
