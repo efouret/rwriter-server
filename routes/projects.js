@@ -20,14 +20,14 @@ router
         function *(next) {
             let project = yield new Project(this.request.body).save();
             this.set('Location', `/projects/${project.id}`);
+            this.set('Access-Control-Expose-Headers', 'Location');
             this.status = 201;
         }
     )
     .put('/projects/:id', koaBody,
         function *(next) {
-            console.log(this.request.body);
             let project = yield Project.findByIdAndUpdate(this.params.id, this.request.body);
-            this.status = 204;
+            this.body = JSON.stringify(project);
         }
     );
 

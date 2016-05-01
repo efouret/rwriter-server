@@ -21,8 +21,14 @@ router
         function *(next) {
             let chapter = yield new Chapter(this.request.body).save();
             this.set('Location', `/chapters/${chapter.id}`);
+            this.set('Access-Control-Expose-Headers', 'Location');
             this.status = 201;
+        }
+    ).put('/characters/:id', koaBody,
+        function *(next) {
+            let chapter = yield Chapter.findByIdAndUpdate(this.params.id, this.request.body);
+            this.status = 200;
         }
     );
 
-module.exports = router;    
+module.exports = router;

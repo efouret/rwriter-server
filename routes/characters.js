@@ -24,6 +24,12 @@ router
             this.set('Access-Control-Expose-Headers', 'Location');
             this.status = 201;
         }
+    )
+    .put('/characters/:id', koaBody,
+        function *(next) {
+            let character = yield Character.findByIdAndUpdate(this.params.id, this.request.body);
+            this.body = JSON.stringify(character);
+        }
     );
 
 module.exports = router;
