@@ -21,8 +21,15 @@ router
         function *(next) {
             let scene = yield new Scene(this.request.body).save();
             this.set('Location', `/scenes/${scene.id}`);
+            this.set('Access-Control-Expose-Headers', 'Location');
             this.status = 201;
+        }
+    )
+    .put('/scenes/:id', koaBody,
+        function *(next) {
+            let scene = yield Scene.findByIdAndUpdate(this.params.id, this.request.body);
+            this.body = JSON.stringify(scene);
         }
     );
 
-module.exports = router;    
+module.exports = router;

@@ -24,7 +24,7 @@ router
             this.set('Access-Control-Expose-Headers', 'Location');
             this.status = 201;
         }
-    ).put('/characters/:id', koaBody,
+    ).put('/chapters/:id', koaBody,
         function *(next) {
             let chapter = yield Chapter.findByIdAndUpdate(this.params.id, this.request.body);
             this.status = 200;
