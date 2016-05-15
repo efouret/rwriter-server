@@ -10,21 +10,24 @@ const scenes = require('./routes/scenes');
 
 const port = 8090;
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(process.env.MONGO_URL);
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error',  function (err) {
+	console.log('connection error:' + err);
+});
 db.once('open', function () {
     console.log(`Server listening on port ${port}`);
 });
 
 app
     .use(cors())
+
     .use(function* (next) {
         let start = new Date;
         let inBody = this.request.body;
         yield next;
         let ms = new Date - start;
-        console.log('%s %s - IN %s - OUT %s - %s - %s', this.method, this.url, inBody, this.body, this.status, ms);
+        console.log('%s - %s %s - IN %s - OUT %s - %s - %s', this.ip, this.method, this.url, inBody, this.body, this.status, ms);
     })
 
     .use(projects.routes())
